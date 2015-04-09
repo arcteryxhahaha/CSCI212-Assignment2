@@ -279,24 +279,24 @@ void const rrSim(tProcess processes[], int procNum, int quanta) {
 		// Check if the process will complete before the cycle finishes
 		if (processes[currentProcess].remainingTime > quanta)
 			currentCycle = quanta;
-		else {
+		else if (processes[currentProcess].remainingTime > 0 || processes[currentProcess].remainingTime > quanta) {
 			currentCycle = processes[currentProcess].remainingTime;
 			// Calculate the stopTime and turnAroundTime
 			processes[currentProcess].stopTime = currentTime + currentCycle;
 			processes[currentProcess].turnAroundTime = processes[currentProcess].stopTime;
-		}
 
-		// Update the remaining time of the currentProcess
-		processes[currentProcess].remainingTime -= currentCycle;
-		// Update the totalTimeRemaining
-		totalTimeRemaining -= currentCycle;
-		// Update the currentTime
-		currentTime += currentCycle;
+			// Update the remaining time of the currentProcess
+			processes[currentProcess].remainingTime -= currentCycle;
+			// Update the totalTimeRemaining
+			totalTimeRemaining -= currentCycle;
+			// Update the currentTime
+			currentTime += currentCycle;
 
-		// Update wait time for all processes except the current one
-		for (int i = 0; i < procNum; ++i) {
-			if (i != currentProcess)
-				processes[i].waitTime += currentCycle;
+			// Update wait time for all processes except the current one
+			for (int i = 0; i < procNum; ++i) {
+				if (i != currentProcess)
+					processes[i].waitTime += currentCycle;
+			}
 		}
 
 		// Move onto next process or back to the start
