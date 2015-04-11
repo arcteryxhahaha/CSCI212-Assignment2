@@ -71,11 +71,6 @@ int main() {
 			goodRead = false;
 	}
 
-	printf("Process\tBurst Time\tStart Time\tStop Time\n");
-	for (int i = 0; i < procNum; ++i) {
-		printf("P%d\t%d\t\t%d\t\t%d\n", processes[i].id, processes[i].burstTime, processes[i].startTime, processes[i].stopTime);
-	}
-
 	if (strcmp(algorithm, "RR") == 0) {
 		rrSim(processes, procNum, quanta);
 	}
@@ -271,8 +266,11 @@ void const srtSim(tProcess processes[], int procNum) {
 		if (currentProcess < lastCurrentlyQueued)
 			sortProcesses(processes, currentProcess, lastCurrentlyQueued);
 
-		// Calculate how long this process will run for. ie. until the next process job arrives to be queued
-		currentCycle = processes[lastCurrentlyQueued + 1].startTime - currentTime;
+		// Calculate how long this process will run for. ie. until the next process job arrives to be queued or until the process is completed
+		if (processes[currentProcess].remainingTime > processes[lastCurrentlyQueued + 1].startTime)
+			currentCycle = processes[lastCurrentlyQueued + 1].startTime - currentTime;
+		else
+			currentCycle = processes[currentProcess].remainingTime;
 
 		// Calculate the stopTime and turnAroundTime
 		processes[currentProcess].stopTime = currentTime + currentCycle;
@@ -284,10 +282,8 @@ void const srtSim(tProcess processes[], int procNum) {
 		currentTime += currentCycle;
 
 		// Update wait time for all processes except the current one
-		for (int i = 0; i < procNum; ++i) {
-			if (i != currentProcess)
+		for (int i = currentProcess+1; i < lastCurrentlyQueued; ++i)
 				processes[i].waitTime += currentCycle;
-		}
 
 		// Check if the current process has completed
 		if (processes[currentProcess].remainingTime <= 0)
