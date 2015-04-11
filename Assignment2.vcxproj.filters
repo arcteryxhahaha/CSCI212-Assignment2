@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="sched1.c">
+    <ClCompile Include="sched2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sched2.c">
+    <ClCompile Include="sched1.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -34,7 +34,7 @@ void procCpy(tProcess * dest, tProcess src);
 void const fcfsSim(tProcess processes[], int procNum);
 void const sjfSim(tProcess processes[], int procNum);
 void const srtSim(tProcess processes[], int procNum);
-void const rrSim(tProcess processes[], int procNum);
+void const rrSim(tProcess processes[], int procNum, int quanta);
 
 int main() {
 
@@ -136,9 +136,9 @@ void sortProcesses(tProcess arr[], int left, int right) {
 	tProcess pivot = arr[(left + right) / 2];
 
 	while (i <= j) {
-		while (arr[i].burstTime < pivot.burstTime)
+		while (arr[i].remainingTime < pivot.remainingTime)
 			++i;
-		while (arr[j].burstTime > pivot.burstTime)
+		while (arr[j].remainingTime > pivot.remainingTime)
 			--j;
 		if (i <= j) {
 			procCpy(&tmp, arr[i]);
