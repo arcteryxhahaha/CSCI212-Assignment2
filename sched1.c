@@ -171,6 +171,7 @@ void const fcfsSim(tProcess processes[], int procNum) {
 	processes[0].stopTime = processes[0].burstTime;
 	processes[0].turnAroundTime = processes[0].stopTime;
 	int currentTime = processes[0].burstTime;
+	double totalWaitTime = 0.0, totalTurnAroundTime = processes[0].turnAroundTime;
 
 	// Calculate the remaining processes
 	for (int i = 1; i < procNum; ++i) {
@@ -178,16 +179,15 @@ void const fcfsSim(tProcess processes[], int procNum) {
 		processes[i].stopTime = processes[i].burstTime + currentTime;
 		processes[i].waitTime = currentTime;
 		processes[i].turnAroundTime = processes[i].stopTime;
+		// Add new wait and turn around times to totals
+		totalTurnAroundTime += processes[i].turnAroundTime;
+		totalWaitTime += processes[i].waitTime;
 		// Move the time forward
 		currentTime += processes[i].burstTime;
 	}
 
 	// Calculate average wait and turn around times
-	double averageWaitTime = 0.0, averageTurnAroundTime = 0.0, totalWaitTime = 0.0, totalTurnAroundTime = 0.0;
-	for (int i = 0; i < procNum; ++i) {
-		totalTurnAroundTime += processes[i].turnAroundTime;
-		totalWaitTime += processes[i].waitTime;
-	}
+	double averageWaitTime = 0.0, averageTurnAroundTime = 0.0;
 	averageTurnAroundTime = totalTurnAroundTime / procNum;
 	averageWaitTime = totalWaitTime / procNum;
 
@@ -205,6 +205,7 @@ void const sjfSim(tProcess processes[], int procNum) {
 	processes[0].stopTime = processes[0].burstTime;
 	processes[0].turnAroundTime = processes[0].stopTime;
 	int currentTime = processes[0].burstTime;
+	double totalWaitTime = 0.0, totalTurnAroundTime = processes[0].turnAroundTime;
 
 	// Calculate the remaining processes
 	for (int i = 1; i < procNum; ++i) {
@@ -212,16 +213,15 @@ void const sjfSim(tProcess processes[], int procNum) {
 		processes[i].stopTime = processes[i].burstTime + currentTime;
 		processes[i].waitTime = currentTime;
 		processes[i].turnAroundTime = processes[i].stopTime;
+		// Add new wait and turn around times to totals
+		totalTurnAroundTime += processes[i].turnAroundTime;
+		totalWaitTime += processes[i].waitTime;
 		// Move the time forward
 		currentTime += processes[i].burstTime;
 	}
 
 	// Calculate average wait and turn around times
-	double averageWaitTime = 0.0, averageTurnAroundTime = 0.0, totalWaitTime = 0.0, totalTurnAroundTime = 0.0;
-	for (int i = 0; i < procNum; ++i) {
-		totalTurnAroundTime += processes[i].turnAroundTime;
-		totalWaitTime += processes[i].waitTime;
-	}
+	double averageWaitTime = 0.0, averageTurnAroundTime = 0.0;
 	averageTurnAroundTime = totalTurnAroundTime / procNum;
 	averageWaitTime = totalWaitTime / procNum;
 
@@ -239,6 +239,7 @@ void const srtSim(tProcess processes[], int procNum) {
 	processes[0].stopTime = processes[0].burstTime;
 	processes[0].turnAroundTime = processes[0].stopTime;
 	int currentTime = processes[0].burstTime;
+	double totalWaitTime = 0.0, totalTurnAroundTime = processes[0].turnAroundTime;
 
 	// Calculate the remaining processes
 	for (int i = 1; i < procNum; ++i) {
@@ -246,16 +247,15 @@ void const srtSim(tProcess processes[], int procNum) {
 		processes[i].stopTime = processes[i].burstTime + currentTime;
 		processes[i].waitTime = currentTime;
 		processes[i].turnAroundTime = processes[i].stopTime;
+		// Add new wait and turn around times to totals
+		totalTurnAroundTime += processes[i].turnAroundTime;
+		totalWaitTime += processes[i].waitTime;
 		// Move the time forward
 		currentTime += processes[i].burstTime;
 	}
 
 	// Calculate average wait and turn around times
-	double averageWaitTime = 0.0, averageTurnAroundTime = 0.0, totalWaitTime = 0.0, totalTurnAroundTime = 0.0;
-	for (int i = 0; i < procNum; ++i) {
-		totalTurnAroundTime += processes[i].turnAroundTime;
-		totalWaitTime += processes[i].waitTime;
-	}
+	double averageWaitTime = 0.0, averageTurnAroundTime = 0.0;
 	averageTurnAroundTime = totalTurnAroundTime / procNum;
 	averageWaitTime = totalWaitTime / procNum;
 
@@ -279,8 +279,12 @@ void const rrSim(tProcess processes[], int procNum, int quanta) {
 		// Check if the process will complete before the cycle finishes
 		if (processes[currentProcess].remainingTime > quanta)
 			currentCycle = quanta;
-		else if (processes[currentProcess].remainingTime > 0 || processes[currentProcess].remainingTime > quanta) {
+		else if (processes[currentProcess].remainingTime > 0)
 			currentCycle = processes[currentProcess].remainingTime;
+		else // If we need to skip because this process is already completed
+			currentCycle = -1;
+
+		if (currentCycle != -1) {
 			// Calculate the stopTime and turnAroundTime
 			processes[currentProcess].stopTime = currentTime + currentCycle;
 			processes[currentProcess].turnAroundTime = processes[currentProcess].stopTime;
