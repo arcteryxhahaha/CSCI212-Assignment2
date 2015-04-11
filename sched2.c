@@ -315,7 +315,7 @@ void const srtSim(tProcess processes[], int procNum) {
 
 void const rrSim(tProcess processes[], int procNum, int quanta) {
 	// Calculate the total time it will take for all processes
-	int totalTimeRemaining = 0, currentProcess = 0, currentCycle = 0, currentTime = 0, lastCurrentlyQueued = 0;
+	int totalTimeRemaining = 0, currentProcess = -1, currentCycle = 0, currentTime = 0, lastCurrentlyQueued = 0;
 	for (int i = 0; i < procNum; ++i)
 		totalTimeRemaining += processes[i].remainingTime;
 
