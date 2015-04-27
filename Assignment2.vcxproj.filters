@@ -15,11 +15,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="sched2.c">
+    <ClCompile Include="libsched.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sched1.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="libgrapher.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sched2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="libsched.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="libgrapher.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
